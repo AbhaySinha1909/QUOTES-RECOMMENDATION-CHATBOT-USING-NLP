@@ -1,47 +1,35 @@
 import os
 import subprocess
-import time
 import requests
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify
 
-app = Flask(__name__, static_folder="web", static_url_path="")
+app = Flask(__name__, static_folder="web")
 
 RASA_URL = "http://localhost:5005/webhooks/rest/webhook"
 
-rasa_process = None
 
-
-# -----------------------------------------
-# Start Rasa Server
-# -----------------------------------------
+# Start Rasa server (Linux compatible)
 def start_rasa():
-    global rasa_process
-
-    rasa_process = subprocess.Popen(
-        ["rasa", "run", "--enable-api", "--cors", "*"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+    subprocess.Popen(
+        [
+            "rasa",
+            "run",
+            "--enable-api",
+            "--cors",
+            "*",
+            "--port",
+            "5005"
+        ]
     )
 
-    # Wait for Rasa to boot
-    time.sleep(10)
 
-
-# Start Rasa when Flask starts
+# Start Rasa before Flask starts
 start_rasa()
 
 
-# -----------------------------------------
-# Serve Frontend
-# -----------------------------------------
 @app.route("/")
 def index():
     return send_from_directory("web", "index.html")
-
-
-@app.route("/about.html")
-def about():
-    return send_from_directory("web", "about.html")
 
 
 @app.route("/<path:path>")
@@ -49,34 +37,24 @@ def static_files(path):
     return send_from_directory("web", path)
 
 
-# -----------------------------------------
-# Chat API
-# -----------------------------------------
 @app.route("/chat", methods=["POST"])
 def chat():
     try:
-        data = request.json
+        user_message = request.json.get("message")
+        sender = request.json.get("sender")
 
         response = requests.post(
             RASA_URL,
-            json={
-                "sender": data["sender"],
-                "message": data["message"]
-            },
+            json={"sender": sender, "message": user_message},
             timeout=15
         )
 
         return jsonify(response.json())
 
-    except Exception as e:
-        return jsonify([{
-            "text": "⚠️ Server warming up... please try again in a few seconds."
-        }])
+    except Exception:
+        return jsonify([{"text": "Rasa server not ready yet... please wait a few seconds."}])
 
 
-# -----------------------------------------
-# Run Flask
-# -----------------------------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
