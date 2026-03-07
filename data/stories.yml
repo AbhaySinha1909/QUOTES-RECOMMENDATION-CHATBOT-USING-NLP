@@ -1,0 +1,38 @@
+version: "3.1"
+
+stories:
+
+- story: greet user
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- story: motivational quote
+  steps:
+  - intent: motivation
+  - action: utter_motivation
+
+- story: inspirational quote
+  steps:
+  - intent: inspiration
+  - action: utter_inspiration
+
+- story: love quote
+  steps:
+  - intent: love
+  - action: utter_love
+
+- story: funny quote
+  steps:
+  - intent: funny
+  - action: utter_funny
+
+- story: success quote
+  steps:
+  - intent: success
+  - action: utter_success
+
+- story: goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye

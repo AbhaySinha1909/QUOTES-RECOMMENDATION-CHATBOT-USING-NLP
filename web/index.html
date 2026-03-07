@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QuoteGenie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>QuoteGenie</h2>
+            <button onclick="createNewChat()" class="new-chat-btn">+ New Chat</button>
+       </div>
+
+        <div id="chat-list" class="chat-list"></div>
+    </aside>
+
+    <!-- MAIN CHAT -->
+    <div class="main-section">
+
+        <header class="navbar">
+            <div class="nav-right">
+                <button onclick="deleteCurrentChat()" class="icon-btn" title="Delete Chat">🗑</button>
+                <button onclick="toggleDarkMode()" class="icon-btn" title="Toggle Dark Mode">🌙</button>
+                <a href="about.html" class="nav-btn">About</a>
+            </div>
+        </header>
+
+        <main class="main-container">
+            <div id="chat-box" class="chat-box"></div>
+
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Ask for motivation, love, success, humor..." />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </main>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

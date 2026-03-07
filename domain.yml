@@ -1,0 +1,48 @@
+version: "3.1"
+
+intents:
+  - greet
+  - motivation
+  - inspiration
+  - love
+  - funny
+  - success
+  - goodbye
+
+responses:
+
+  utter_greet:
+    - text: "Hello! 👋 I can share motivational, inspirational, love, funny, or success quotes. What would you like today?"
+
+  utter_motivation:
+    - text: "Believe you can and you're halfway there."
+    - text: "The harder you work for something, the greater you'll feel when you achieve it."
+    - text: "Don't stop when you're tired. Stop when you're done."
+
+  utter_inspiration:
+    - text: "The best way to get started is to quit talking and begin doing."
+    - text: "Dream big and dare to fail."
+    - text: "Everything you can imagine is real."
+
+  utter_love:
+    - text: "Love is composed of a single soul inhabiting two bodies."
+    - text: "Where there is love there is life."
+    - text: "You call it madness, but I call it love."
+
+  utter_funny:
+    - text: "I'm not lazy, I'm on energy-saving mode."
+    - text: "Life is short. Smile while you still have teeth."
+    - text: "Why don’t scientists trust atoms? Because they make up everything!"
+
+  utter_success:
+    - text: "Success usually comes to those who are too busy to be looking for it."
+    - text: "Success is not final, failure is not fatal: it is the courage to continue that counts."
+    - text: "Don’t be afraid to give up the good to go for the great."
+
+  utter_goodbye:
+    - text: "Goodbye! Have a great day ahead! 😊"
+    - text: "See you later! Come back anytime for more quotes."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
