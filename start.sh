@@ -7,10 +7,13 @@ rasa run \
   --enable-api \
   --cors "*" \
   -p 5005 \
-  -i 0.0.0.0 &
+  -i 0.0.0.0 > rasa.log 2>&1 &
 
 echo "Waiting for Rasa to start..."
-sleep 30
+sleep 50
+
+echo "Checking if Rasa started..."
+cat rasa.log
 
 echo "Starting Flask with Gunicorn..."
 gunicorn app:app --bind 0.0.0.0:$PORT
