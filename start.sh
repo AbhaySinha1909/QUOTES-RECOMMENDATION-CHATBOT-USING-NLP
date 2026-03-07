@@ -3,17 +3,20 @@
 echo "Starting Rasa Server..."
 
 rasa run \
-  -m models/20260307-122807-tranquil-cricket.tar.gz \
+  --model models/20260307-122807-tranquil-cricket.tar.gz \
   --enable-api \
   --cors "*" \
-  -p 5005 \
-  -i 0.0.0.0 > rasa.log 2>&1 &
+  --port 5005 \
+  --host 0.0.0.0 &
 
-echo "Waiting for Rasa to start..."
-sleep 50
+echo "Waiting for Rasa to become ready..."
 
-echo "Checking if Rasa started..."
-cat rasa.log
+until curl -s http://localhost:5005/status > /dev/null
+do
+  sleep 3
+done
+
+echo "Rasa is ready."
 
 echo "Starting Flask with Gunicorn..."
 gunicorn app:app --bind 0.0.0.0:$PORT
