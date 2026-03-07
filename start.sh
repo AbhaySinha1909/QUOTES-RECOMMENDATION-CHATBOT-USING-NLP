@@ -3,11 +3,11 @@
 echo "Starting Rasa Server..."
 
 rasa run \
-  --model models/20260307-122807-tranquil-cricket.tar.gz \
+  -m models/20260307-122807-tranquil-cricket.tar.gz \
   --enable-api \
   --cors "*" \
-  --port 5005 \
-  --host 0.0.0.0 &
+  -p 5005 \
+  -i 0.0.0.0 &
 
 echo "Waiting for Rasa to start..."
 sleep 30
