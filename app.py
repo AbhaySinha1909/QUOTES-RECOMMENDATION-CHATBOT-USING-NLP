@@ -26,15 +26,14 @@ def chat():
         response = requests.post(
             RASA_URL,
             json={"sender": sender, "message": user_message},
-            timeout=30,
+            timeout=20,
         )
 
         return jsonify(response.json())
 
     except Exception as e:
-        print("Error communicating with Rasa:", str(e))
         return jsonify(
-            [{"text": "Rasa server is starting... please wait a few seconds."}]
+            [{"text": "Rasa server not responding. Please try again."}]
         )
 
 
