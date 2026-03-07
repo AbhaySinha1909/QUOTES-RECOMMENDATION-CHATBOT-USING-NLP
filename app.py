@@ -7,24 +7,33 @@ app = Flask(__name__, static_folder="web")
 
 RASA_URL = "http://localhost:5005/webhooks/rest/webhook"
 
+rasa_process = None
 
-# Start Rasa server (Linux compatible)
+
 def start_rasa():
-    subprocess.Popen(
-        [
-            "rasa",
-            "run",
-            "--enable-api",
-            "--cors",
-            "*",
-            "--port",
-            "5005"
-        ]
-    )
+    global rasa_process
+
+    if rasa_process is None:
+        print("Starting Rasa server...")
+
+        rasa_process = subprocess.Popen(
+            [
+                "rasa",
+                "run",
+                "--model",
+                "models/20260307-122807-tranquil-cricket.tar.gz",
+                "--enable-api",
+                "--cors",
+                "*",
+                "--port",
+                "5005",
+            ]
+        )
 
 
-# Start Rasa before Flask starts
-start_rasa()
+@app.before_first_request
+def initialize():
+    start_rasa()
 
 
 @app.route("/")
@@ -41,18 +50,21 @@ def static_files(path):
 def chat():
     try:
         user_message = request.json.get("message")
-        sender = request.json.get("sender")
+        sender = request.json.get("sender", "default")
 
         response = requests.post(
             RASA_URL,
             json={"sender": sender, "message": user_message},
-            timeout=15
+            timeout=15,
         )
 
         return jsonify(response.json())
 
-    except Exception:
-        return jsonify([{"text": "Rasa server not ready yet... please wait a few seconds."}])
+    except Exception as e:
+        print("Error communicating with Rasa:", str(e))
+        return jsonify(
+            [{"text": "Rasa server not ready yet... please wait a few seconds."}]
+        )
 
 
 if __name__ == "__main__":
