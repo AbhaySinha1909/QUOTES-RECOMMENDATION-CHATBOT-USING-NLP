@@ -2,28 +2,15 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+COPY . .
 
-# Copy project
-COPY . /app
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Train model if needed (optional)
-# RUN rasa train
-
-# Expose ports
-EXPOSE 5005
 EXPOSE 5000
+EXPOSE 5005
 
-# Start both Rasa and Flask
 CMD bash -c "\
-rasa run --enable-api --cors '*' -p 5005 -i 0.0.0.0 & \
+rasa run --model models/20260307-122807-tranquil-cricket.tar.gz \
+--enable-api --cors '*' --port 5005 --host 0.0.0.0 & \
 sleep 20 && \
 gunicorn app:app --bind 0.0.0.0:5000"
