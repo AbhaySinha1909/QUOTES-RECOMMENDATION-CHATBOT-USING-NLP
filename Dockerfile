@@ -1,16 +1,12 @@
-FROM python:3.10-slim
+FROM rasa/rasa:3.6.2
 
 WORKDIR /app
 
-COPY . .
+COPY . /app
 
-RUN pip install --no-cache-dir -r requirements.txt
+USER root
+RUN pip install -r requirements.txt
 
-EXPOSE 5000
-EXPOSE 5005
+USER 1001
 
-CMD bash -c "\
-rasa run --model models/20260307-122807-tranquil-cricket.tar.gz \
---enable-api --cors '*' --port 5005 --host 0.0.0.0 & \
-sleep 20 && \
-gunicorn app:app --bind 0.0.0.0:5000"
+CMD ["run", "--enable-api", "--cors", "*", "--port", "5005"]
