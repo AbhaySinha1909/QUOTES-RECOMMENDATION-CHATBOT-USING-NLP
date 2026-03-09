@@ -142,7 +142,7 @@ function sendMessage() {
 
     showTyping();
 
-    fetch("/chat", {
+    fetch("https://web-production-a3fed.up.railway.app/webhooks/rest/webhook", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -41,5 +41,3 @@
 #  password: password
 #  queue: queue
 
-action_endpoint:
-  url: "http://action-server:5055/webhook"
